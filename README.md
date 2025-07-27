@@ -1,41 +1,70 @@
-# Turborepo Monorepo Deployment Practice
+﻿# PlaySync 🎵
 
-This repository is a practice project for deploying a Turborepo monorepo using CI/CD pipelines and AWS. It demonstrates how to structure, configure, and prepare a monorepo for modern deployment workflows.
+**PlaySync** is a collaborative music streaming platform where users can listen to songs together in real-time. This project aims to provide a seamless shared music experience, allowing users to sync their playlists, chat, and enjoy music together, no matter where they are.
 
-## Getting Started
+> **🚧 This project is currently under development.** More features and improvements are coming soon!
 
-If you want to copy or use this Turborepo project, follow these steps:
+## 🚀 Features (Planned & Implemented)
+- 🎼 Real-time song synchronization across multiple users.
+- 💬 Chat functionality to discuss music while listening.
+- 📜 Playlist management and sharing.
+- 🎚️ Volume and playback control for all participants.
+- 🔐 Authentication and user management.
 
-### 1. Clone the Repository
+## 📌 Tech Stack
+- **Frontend:** React, TypeScript, Tailwind CSS
+- **Backend:** Node.js, Express.js, MongoDB, Redis
+- **Real-time Communication:** WebSockets
+- **Authentication:** JWT-based authentication
+- **Storage:** Cloudinary (for media storage, if applicable)
 
-Clone this repository to your local machine.
+## 📜 Database Schema
+[View Schema Here](#) <!-- Replace # with actual schema link -->
 
-### 2. Set Up the Database Package (`packages/db`)
+## 🎨 UI Design
+[View UI Mockups Here](#) <!-- Replace # with actual UI design link -->
 
-1. **Create a `.env` file in `packages/db/`**
+## 🚀 Getting Started
 
-   Add the following line to `packages/db/.env`:
-   ```env
-   DATABASE_URL="<your-database-connection-url>"
-   ```
-   Replace `<your-database-connection-url>` with your actual database connection string (e.g., for PostgreSQL).
+### Prerequisites
+Make sure you have the following installed:
+- **Node.js** (v16+)
+- **MongoDB** (Local or Atlas)
+- **Redis** (For caching and session management)
 
-2. **Generate the Prisma client**
-
-   Run the following command from the root of the repository:
+### Installation
+1. Clone the repository:
    ```sh
-   pnpm prisma generate --filter @repo/db
+   git clone https://github.com/your-username/play-sync.git
+   cd play-sync
    ```
-   This will generate the Prisma client for the database package.
+2. Install dependencies:
+   ```sh
+   npm install
+   ```
+3. Set up environment variables (create a `.env` file):
+   ```env
+   PORT=5000
+   MONGO_URI=your_mongodb_connection_string
+   REDIS_URL=your_redis_connection_string
+   JWT_SECRET=your_secret_key
+   ```
+4. Start the development server:
+   ```sh
+   npm run dev
+   ```
 
-## About This Project
+## 📜 API Documentation
+- **Base URL:** `http://localhost:5000/api`
+- Detailed API documentation will be available soon.
 
-- **Monorepo:** Uses Turborepo to manage multiple packages and apps.
-- **CI/CD:** Intended for practicing automated deployment pipelines.
-- **AWS:** Deployment target is AWS (e.g., using services like ECS, Lambda, or EC2).
+## 🔧 Contributing
+Contributions are welcome! Feel free to fork the repo and submit pull requests.
 
-## Useful Links
+## 📜 License
+This project is licensed under the **MIT License**.
 
-- [Turborepo Documentation](https://turborepo.com/docs)
-- [Prisma Documentation](https://www.prisma.io/docs)
-- [AWS Getting Started](https://aws.amazon.com/getting-started/)
+---
+### ⚠️ Note: This project is still in development. More features and optimizations are coming soon!
+
+🚀 Stay tuned for updates!
