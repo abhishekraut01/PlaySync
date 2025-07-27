@@ -6,8 +6,6 @@ interface ButtonProps {
   size?: 'sm' | 'md' | 'lg';
   onClick?: () => void;
   className?: string;
-  type?: 'button' | 'submit' | 'reset';
-  disabled?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({ 
@@ -15,16 +13,14 @@ const Button: React.FC<ButtonProps> = ({
   variant = 'primary', 
   size = 'md', 
   onClick,
-  className = '',
-  type = 'button',
-  disabled = false
+  className = ''
 }) => {
   const baseClasses = 'font-medium rounded-full transition-all duration-200 flex items-center justify-center';
   
   const variantClasses = {
-    primary: 'bg-primary hover:bg-primary-400 text-white disabled:opacity-50 disabled:cursor-not-allowed',
-    secondary: 'bg-accent hover:bg-accent-lighter text-white disabled:opacity-50 disabled:cursor-not-allowed',
-    outline: 'bg-transparent border-2 border-primary text-primary hover:bg-primary-50 hover:text-primary-600 disabled:opacity-50 disabled:cursor-not-allowed'
+    primary: 'bg-primary hover:bg-primary-400 text-white',
+    secondary: 'bg-accent hover:bg-accent-lighter text-white',
+    outline: 'bg-transparent border-2 border-primary text-primary hover:bg-primary-50 hover:text-primary-600'
   };
   
   const sizeClasses = {
@@ -35,9 +31,7 @@ const Button: React.FC<ButtonProps> = ({
   
   return (
     <button
-      type={type}
       onClick={onClick}
-      disabled={disabled}
       className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
     >
       {children}
