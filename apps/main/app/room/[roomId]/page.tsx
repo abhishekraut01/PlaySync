@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
 import { Send, Search, Share, MoreHorizontal, Play } from 'lucide-react'
+import { SplashCursor } from '@/components/ui/splash-cursor'
 
 interface Song {
   id: string
@@ -116,9 +117,10 @@ export default function RoomPage({ params }: { params: { roomId: string } }) {
   }
 
   return (
-    <div className="min-h-screen bg-[#1a1a2e] text-white">
+    <div className="min-h-screen bg-transparent text-white">
       {/* Header */}
-      <header className="flex items-center justify-between p-4 bg-[#1a1a2e] border-b border-gray-700/30">
+      <SplashCursor />
+      <header className="flex items-center justify-between p-4 bg-transparent ">
         <div className="flex items-center space-x-2">
           <div className="w-8 h-8 bg-[#9b5de5] rounded-lg flex items-center justify-center">
             <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -148,10 +150,10 @@ export default function RoomPage({ params }: { params: { roomId: string } }) {
 
       <div className="flex h-[calc(100vh-80px)]">
         {/* Main Content */}
-        <div className="flex-1 p-6">
+        <div className="flex-1 pt-24">
           {/* YouTube Video Player */}
           <div className="w-full max-w-4xl mx-auto">
-            <div className="aspect-video bg-black rounded-lg border-2 border-blue-500 relative overflow-hidden">
+            <div className="aspect-video bg-black rounded-lg border-2 border-[#9b5de5] relative overflow-hidden">
               {currentVideo?.videoId ? (
                 <iframe
                   width="100%"
@@ -175,7 +177,7 @@ export default function RoomPage({ params }: { params: { roomId: string } }) {
         </div>
 
         {/* Sidebar */}
-        <div className="w-80 bg-[#2d3748] border-l border-gray-700/30 flex flex-col">
+        <div className="w-80 bg-transparent border-l border-gray-700/30 flex flex-col">
           {/* Tab Headers */}
           <div className="flex items-center justify-between p-4 border-b border-gray-700/30">
             <div className="flex space-x-2">
