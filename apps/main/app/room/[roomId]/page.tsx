@@ -146,7 +146,7 @@ export default function RoomPage({ params }: { params: { roomId: string } }) {
         {/* Hide creator info on mobile */}
         <div className="text-center hidden md:block">
           <p className="text-sm text-gray-400">Created by</p>
-          <p className="text-white font-medium">sweabhishek01</p>
+          <p className="text-white font-medium">{session.user?.name}</p>
         </div>
 
         <div className="flex items-center space-x-3">
