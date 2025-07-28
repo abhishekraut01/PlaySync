@@ -4,7 +4,8 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
-import { Send } from 'lucide-react'
+import { Send , Search, Share, MoreHorizontal } from 'lucide-react'
+
 
 interface Song {
   id: string
@@ -51,6 +52,7 @@ export default function RoomPage({ params }: { params: { roomId: string } }) {
   const [searchResults, setSearchResults] = useState<Song[]>([])
   const [isSearching, setIsSearching] = useState(false)
   const chatEndRef = useRef<HTMLDivElement>(null)
+  const [activeTab, setActiveTab] = useState<'Music' | 'Chat'>('Music')
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -109,28 +111,32 @@ export default function RoomPage({ params }: { params: { roomId: string } }) {
 
   return (
     <div className="min-h-screen bg-[#111827] text-white">
-      {/* Compact Header */}
-      <header className="bg-slate-800/50 backdrop-blur-lg border-b border-slate-700 p-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
-              <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
-              </svg>
-            </div>
-            <span className="text-xl font-bold">PlaySync</span>
+         {/* Header */}
+         <header className="flex items-center justify-between p-4 bg-[#1a1a2e]/50 backdrop-blur-lg border-b border-gray-700/30">
+        <div className="flex items-center space-x-2">
+          <div className="w-8 h-8 bg-[#9b5de5] rounded-lg flex items-center justify-center">
+            <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+            </svg>
           </div>
-          <div className="flex items-center space-x-3">
-            <button className="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg transition-colors text-sm">
-              Share
-            </button>
-            <button 
-              onClick={() => router.push('/')}
-              className="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-lg transition-colors text-sm"
-            >
-              Leave
-            </button>
-          </div>
+          <span className="text-xl font-bold">PlaySync</span>
+        </div>
+        
+        <div className="text-center">
+          <p className="text-sm text-gray-400">Created by</p>
+          <p className="text-white font-medium">sweabhishek01</p>
+        </div>
+        
+        <div className="flex items-center space-x-3">
+          <button className="px-4 py-2 bg-gray-600/50 hover:bg-gray-600/70 rounded-full transition-colors text-sm">
+            Share
+          </button>
+          <button 
+            onClick={() => router.push('/')}
+            className="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-full transition-colors text-sm"
+          >
+            Leave
+          </button>
         </div>
       </header>
 
