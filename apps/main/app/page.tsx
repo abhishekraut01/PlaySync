@@ -40,7 +40,7 @@ export default function HomePage() {
     <div className="min-h-screen bg-black">
       <SplashCursor />
       {/* Header */}
-      <header className="p-6 flex justify-between items-center">
+      <header className="p-6 flex justify-between items-center bg-transparent relative z-10">
         <div className="flex items-center space-x-2">
           <div className="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
             <svg
@@ -61,6 +61,7 @@ export default function HomePage() {
               width={40}
               height={40}
               className="rounded-full"
+              draggable={false}
             />
           )}
         </div>
@@ -112,11 +113,12 @@ export default function HomePage() {
           <div className="relative">
             <div className="relative z-10">
               <Image
-                src="/HomeImage-removebg-preview.png"
+                src="/ChatGPT Image Jul 28, 2025, 10_43_08 PM.png"
                 alt="Acoustic Guitar"
                 width={400} // Reduced from 600 to 400
                 height={300} // Reduced from 400 to 300
-                className="w-full h-auto rounded-2xl shadow-2xl"
+                className="w-full h-auto rounded-2xl shadow-2xl select-none "
+                draggable="false"
                 priority
               />
             </div>

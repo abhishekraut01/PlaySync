@@ -108,7 +108,7 @@ export default function RoomPage({ params }: { params: { roomId: string } }) {
   }
 
   return (
-    <div className="min-h-screen bg-slate-900 text-white">
+    <div className="min-h-screen bg-[#111827] text-white">
       {/* Compact Header */}
       <header className="bg-slate-800/50 backdrop-blur-lg border-b border-slate-700 p-3">
         <div className="flex items-center justify-between">
@@ -138,7 +138,7 @@ export default function RoomPage({ params }: { params: { roomId: string } }) {
         {/* Main Content */}
         <div className="flex-1 flex flex-col">
           {/* YouTube Video Player */}
-          <div className="flex-1 bg-black flex items-center justify-center p-4">
+          <div className="flex-1 bg-[#1F2937] flex items-center justify-center p-4">
             <div className="w-full max-w-4xl aspect-video">
               {currentVideo?.videoId ? (
                 <iframe
@@ -152,7 +152,7 @@ export default function RoomPage({ params }: { params: { roomId: string } }) {
                   className="rounded-lg"
                 />
               ) : (
-                <div className="w-full h-full bg-slate-800 rounded-lg flex items-center justify-center">
+                <div className="w-full h-full bg-black rounded-lg flex items-center justify-center">
                   <div className="text-center">
                     <div className="w-24 h-24 bg-purple-600 rounded-full flex items-center justify-center mb-4 mx-auto">
                       <svg className="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -168,7 +168,7 @@ export default function RoomPage({ params }: { params: { roomId: string } }) {
           </div>
 
           {/* Chat Section */}
-          <div className="h-64 bg-slate-800 border-t border-slate-700 flex flex-col">
+          <div className="h-64 bg-[#1F2937] border-t border-slate-700 flex flex-col">
             <div className="p-3 border-b border-slate-700">
               <h3 className="text-lg font-semibold">Room Chat</h3>
             </div>
@@ -216,7 +216,7 @@ export default function RoomPage({ params }: { params: { roomId: string } }) {
         </div>
 
         {/* Sidebar - Search */}
-        <div className="w-full lg:w-80 bg-slate-800 border-l border-slate-700">
+        <div className="w-full lg:w-80 bg-[#1F2937] border-l border-slate-700">
           <div className="p-4 border-b border-slate-700">
             <h3 className="text-lg font-semibold mb-4">Search Songs</h3>
             
