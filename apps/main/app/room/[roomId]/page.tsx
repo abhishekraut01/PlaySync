@@ -4,8 +4,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
-import { Send , Search, Share, MoreHorizontal } from 'lucide-react'
-
+import { Send, Search, Share, MoreHorizontal, Play } from 'lucide-react'
 
 interface Song {
   id: string
@@ -39,6 +38,13 @@ const dummyMessages: ChatMessage[] = [
     message: 'Can we play some Ed Sheeran next?',
     avatar: 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=100',
     timestamp: '2:32 PM'
+  },
+  {
+    id: '3',
+    user: 'Mike',
+    message: 'Great choice! This is one of my favorites',
+    avatar: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=100',
+    timestamp: '2:35 PM'
   }
 ]
 
@@ -110,9 +116,9 @@ export default function RoomPage({ params }: { params: { roomId: string } }) {
   }
 
   return (
-    <div className="min-h-screen bg-[#111827] text-white">
-         {/* Header */}
-         <header className="flex items-center justify-between p-4 bg-[#1a1a2e]/50 backdrop-blur-lg border-b border-gray-700/30">
+    <div className="min-h-screen bg-[#1a1a2e] text-white">
+      {/* Header */}
+      <header className="flex items-center justify-between p-4 bg-[#1a1a2e] border-b border-gray-700/30">
         <div className="flex items-center space-x-2">
           <div className="w-8 h-8 bg-[#9b5de5] rounded-lg flex items-center justify-center">
             <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -128,24 +134,24 @@ export default function RoomPage({ params }: { params: { roomId: string } }) {
         </div>
         
         <div className="flex items-center space-x-3">
-          <button className="px-4 py-2 bg-gray-600/50 hover:bg-gray-600/70 rounded-full transition-colors text-sm">
+          <button className="px-6 py-2 bg-gray-600/50 hover:bg-gray-600/70 rounded-full transition-colors text-sm">
             Share
           </button>
           <button 
             onClick={() => router.push('/')}
-            className="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-full transition-colors text-sm"
+            className="px-6 py-2 bg-red-600 hover:bg-red-700 rounded-full transition-colors text-sm"
           >
             Leave
           </button>
         </div>
       </header>
 
-      <div className="flex flex-col lg:flex-row h-[calc(100vh-64px)]">
+      <div className="flex h-[calc(100vh-80px)]">
         {/* Main Content */}
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 p-6">
           {/* YouTube Video Player */}
-          <div className="flex-1 bg-[#1F2937] flex items-center justify-center p-4">
-            <div className="w-full max-w-4xl aspect-video">
+          <div className="w-full max-w-4xl mx-auto">
+            <div className="aspect-video bg-black rounded-lg border-2 border-blue-500 relative overflow-hidden">
               {currentVideo?.videoId ? (
                 <iframe
                   width="100%"
@@ -155,132 +161,168 @@ export default function RoomPage({ params }: { params: { roomId: string } }) {
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
-                  className="rounded-lg"
+                  className="w-full h-full"
                 />
               ) : (
-                <div className="w-full h-full bg-black rounded-lg flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="w-24 h-24 bg-purple-600 rounded-full flex items-center justify-center mb-4 mx-auto">
-                      <svg className="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z"/>
-                      </svg>
-                    </div>
-                    <h3 className="text-xl font-semibold mb-2">No video selected</h3>
-                    <p className="text-slate-400">Search for songs and select one to start playing</p>
+                <div className="w-full h-full flex items-center justify-center">
+                  <div className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center">
+                    <Play className="w-8 h-8 text-white ml-1" />
                   </div>
                 </div>
               )}
             </div>
           </div>
-
-          {/* Chat Section */}
-          <div className="h-64 bg-[#1F2937] border-t border-slate-700 flex flex-col">
-            <div className="p-3 border-b border-slate-700">
-              <h3 className="text-lg font-semibold">Room Chat</h3>
-            </div>
-            
-            <div className="flex-1 overflow-y-auto p-4 space-y-3">
-              {messages.map((message) => (
-                <div key={message.id} className="flex items-start space-x-3">
-                  <Image
-                    src={message.avatar}
-                    alt={message.user}
-                    width={32}
-                    height={32}
-                    className="rounded-full flex-shrink-0"
-                  />
-                  <div className="flex-1">
-                    <div className="bg-purple-600 rounded-2xl rounded-tl-md px-4 py-2 max-w-xs inline-block">
-                      <p className="text-sm text-white">{message.message}</p>
-                    </div>
-                    <p className="text-xs text-slate-400 mt-1">{message.user} • {message.timestamp}</p>
-                  </div>
-                </div>
-              ))}
-              <div ref={chatEndRef} />
-            </div>
-
-            <form onSubmit={handleSendMessage} className="p-4 border-t border-slate-700">
-              <div className="flex space-x-2">
-                <input
-                  type="text"
-                  value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
-                  placeholder="Type Something"
-                  className="flex-1 bg-slate-700 text-white placeholder-slate-400 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                />
-                <button
-                  type="submit"
-                  disabled={!newMessage.trim()}
-                  className="bg-purple-600 hover:bg-purple-700 disabled:bg-slate-600 rounded-xl p-3 transition-colors"
-                >
-                  <Send size={20} />
-                </button>
-              </div>
-            </form>
-          </div>
         </div>
 
-        {/* Sidebar - Search */}
-        <div className="w-full lg:w-80 bg-[#1F2937] border-l border-slate-700">
-          <div className="p-4 border-b border-slate-700">
-            <h3 className="text-lg font-semibold mb-4">Search Songs</h3>
-            
+        {/* Sidebar */}
+        <div className="w-80 bg-[#2d3748] border-l border-gray-700/30 flex flex-col">
+          {/* Tab Headers */}
+          <div className="flex items-center justify-between p-4 border-b border-gray-700/30">
             <div className="flex space-x-2">
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-                placeholder="Search for songs"
-                className="flex-1 bg-slate-700 text-white placeholder-slate-400 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
-              />
               <button
-                onClick={handleSearch}
-                disabled={isSearching || !searchQuery.trim()}
-                className="px-4 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-slate-600 rounded-lg text-sm transition-colors"
-              >
-                {isSearching ? '...' : 'Search'}
-              </button>
-            </div>
-          </div>
-          
-          <div className="p-4 space-y-3 h-[calc(100%-140px)] overflow-y-auto">
-            {searchResults.length === 0 && !isSearching && (
-              <div className="text-center text-slate-400 py-8">
-                <p>Search for songs to see results</p>
-              </div>
-            )}
-            
-            {isSearching && (
-              <div className="text-center text-slate-400 py-8">
-                <p>Searching...</p>
-              </div>
-            )}
-            
-            {searchResults.map((song) => (
-              <div
-                key={song.id}
-                onClick={() => handleVideoSelect(song)}
-                className={`flex items-center space-x-3 p-2 rounded-lg hover:bg-slate-700 cursor-pointer transition-colors ${
-                  currentVideo?.id === song.id ? 'bg-slate-700' : ''
+                onClick={() => setActiveTab('Music')}
+                className={`px-4 py-2 rounded-full text-sm transition-colors ${
+                  activeTab === 'Music'
+                    ? 'bg-[#9b5de5] text-white'
+                    : 'bg-gray-600/50 text-gray-300 hover:bg-gray-600/70'
                 }`}
               >
-                <Image
-                  src={song.image}
-                  alt={song.title}
-                  width={48}
-                  height={48}
-                  className="rounded-lg flex-shrink-0"
-                />
-                <div className="flex-1 min-w-0">
-                  <h4 className="font-medium text-white truncate text-sm">{song.title}</h4>
-                  <p className="text-xs text-slate-400 truncate">{song.artist}</p>
-                </div>
-                <span className="text-xs text-slate-400 flex-shrink-0">{song.duration}</span>
-              </div>
-            ))}
+                Music
+              </button>
+              <button
+                onClick={() => setActiveTab('Chat')}
+                className={`px-4 py-2 rounded-full text-sm transition-colors ${
+                  activeTab === 'Chat'
+                    ? 'bg-[#9b5de5] text-white'
+                    : 'bg-gray-600/50 text-gray-300 hover:bg-gray-600/70'
+                }`}
+              >
+                Chat
+              </button>
+            </div>
+            <button className="p-2 bg-gray-600/50 hover:bg-gray-600/70 rounded-lg transition-colors">
+              <Share className="w-4 h-4" />
+            </button>
           </div>
+
+          {/* Tab Content */}
+          {activeTab === 'Music' ? (
+            <div className="flex-1 flex flex-col">
+              {/* Search Section */}
+              <div className="p-4 border-b border-gray-700/30">
+                <div className="flex space-x-2">
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                    placeholder="Search for songs"
+                    className="flex-1 bg-gray-700 text-white placeholder-gray-400 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  />
+                  <button
+                    onClick={handleSearch}
+                    disabled={isSearching || !searchQuery.trim()}
+                    className="px-4 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 rounded-lg text-sm transition-colors"
+                  >
+                    {isSearching ? '...' : 'search'}
+                  </button>
+                </div>
+              </div>
+
+              {/* Playlist Section */}
+              <div className="flex-1 flex flex-col">
+                <div className="flex items-center justify-between p-4 border-b border-gray-700/30">
+                  <h3 className="text-lg font-semibold">Playlist</h3>
+                  <button className="text-sm text-gray-400 hover:text-white transition-colors">
+                    See more
+                  </button>
+                </div>
+
+                <div className="flex-1 overflow-y-auto">
+                  {searchResults.length === 0 && !isSearching && (
+                    <div className="text-center text-gray-400 py-8">
+                      <p>Search for songs to see results</p>
+                    </div>
+                  )}
+                  
+                  {isSearching && (
+                    <div className="text-center text-gray-400 py-8">
+                      <p>Searching...</p>
+                    </div>
+                  )}
+                  
+                  {searchResults.map((song) => (
+                    <div
+                      key={song.id}
+                      onClick={() => handleVideoSelect(song)}
+                      className={`flex items-center space-x-3 p-3 hover:bg-gray-700/50 cursor-pointer transition-colors border-b border-gray-700/20 ${
+                        currentVideo?.id === song.id ? 'bg-gray-700/50' : ''
+                      }`}
+                    >
+                      <Image
+                        src={song.image}
+                        alt={song.title}
+                        width={48}
+                        height={48}
+                        className="rounded-lg flex-shrink-0"
+                      />
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-medium text-white truncate text-sm">{song.title}</h4>
+                        <p className="text-xs text-gray-400 truncate">{song.artist}</p>
+                      </div>
+                      <button className="p-1 hover:bg-gray-600 rounded transition-colors">
+                        <MoreHorizontal className="w-4 h-4 text-gray-400" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="flex-1 flex flex-col">
+              {/* Chat Messages */}
+              <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                {messages.map((message) => (
+                  <div key={message.id} className="flex items-start space-x-3">
+                    <Image
+                      src={message.avatar}
+                      alt={message.user}
+                      width={32}
+                      height={32}
+                      className="rounded-full flex-shrink-0"
+                    />
+                    <div className="flex-1">
+                      <div className="bg-purple-600 rounded-2xl rounded-tl-md px-4 py-2 max-w-xs inline-block">
+                        <p className="text-sm text-white">{message.message}</p>
+                      </div>
+                      <p className="text-xs text-gray-400 mt-1">{message.user} • {message.timestamp}</p>
+                    </div>
+                  </div>
+                ))}
+                <div ref={chatEndRef} />
+              </div>
+
+              {/* Chat Input */}
+              <form onSubmit={handleSendMessage} className="p-4 border-t border-gray-700/30">
+                <div className="flex space-x-2">
+                  <input
+                    type="text"
+                    value={newMessage}
+                    onChange={(e) => setNewMessage(e.target.value)}
+                    placeholder="Type Something"
+                    className="flex-1 bg-gray-700 text-white placeholder-gray-400 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  />
+                  <button
+                    type="submit"
+                    disabled={!newMessage.trim()}
+                    className="bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 rounded-xl p-3 transition-colors"
+                  >
+                    <Send size={20} />
+                  </button>
+                </div>
+              </form>
+            </div>
+          )}
         </div>
       </div>
     </div>
