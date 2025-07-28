@@ -1,120 +1,129 @@
-'use client'
+"use client";
 
-import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
-import { useState, useRef, useEffect } from 'react'
-import Image from 'next/image'
-import { Send, Search, Share, MoreHorizontal, Play } from 'lucide-react'
-import { SplashCursor } from '@/components/ui/splash-cursor'
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
+import { Send, Search, Share, MoreHorizontal, Play } from "lucide-react";
+import { SplashCursor } from "@/components/ui/splash-cursor";
 
 interface Song {
-  id: string
-  title: string
-  artist: string
-  duration: string
-  image: string
-  videoId?: string
+  id: string;
+  title: string;
+  artist: string;
+  duration: string;
+  image: string;
+  videoId?: string;
 }
 
 interface ChatMessage {
-  id: string
-  user: string
-  message: string
-  avatar: string
-  timestamp: string
+  id: string;
+  user: string;
+  message: string;
+  avatar: string;
+  timestamp: string;
 }
-
 
 const dummyMessages: ChatMessage[] = [
   {
-    id: '1',
-    user: 'Alex',
-    message: 'Love this song! 🎵',
-    avatar: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=100',
-    timestamp: '2:30 PM'
+    id: "1",
+    user: "Alex",
+    message: "Love this song! 🎵",
+    avatar:
+      "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=100",
+    timestamp: "2:30 PM",
   },
   {
-    id: '2',
-    user: 'Sarah',
-    message: 'Can we play some Ed Sheeran next?',
-    avatar: 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=100',
-    timestamp: '2:32 PM'
+    id: "2",
+    user: "Sarah",
+    message: "Can we play some Ed Sheeran next?",
+    avatar:
+      "https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=100",
+    timestamp: "2:32 PM",
   },
   {
-    id: '3',
-    user: 'Mike',
-    message: 'Great choice! This is one of my favorites',
-    avatar: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=100',
-    timestamp: '2:35 PM'
-  }
-]
+    id: "3",
+    user: "Mike",
+    message: "Great choice! This is one of my favorites",
+    avatar:
+      "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=100",
+    timestamp: "2:35 PM",
+  },
+];
 
 export default function RoomPage({ params }: { params: { roomId: string } }) {
-  const { data: session, status } = useSession()
-  const router = useRouter()
-  const [currentVideo, setCurrentVideo] = useState<Song | null>(null)
-  const [messages, setMessages] = useState(dummyMessages)
-  const [newMessage, setNewMessage] = useState('')
-  const [searchQuery, setSearchQuery] = useState('')
-  const [searchResults, setSearchResults] = useState<Song[]>([])
-  const [isSearching, setIsSearching] = useState(false)
-  const chatEndRef = useRef<HTMLDivElement>(null)
-  const [activeTab, setActiveTab] = useState<'Music' | 'Chat'>('Music')
+  const { data: session, status } = useSession();
+  const router = useRouter();
+  const [currentVideo, setCurrentVideo] = useState<Song | null>(null);
+  const [messages, setMessages] = useState(dummyMessages);
+  const [newMessage, setNewMessage] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<Song[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const chatEndRef = useRef<HTMLDivElement>(null);
+  const [activeTab, setActiveTab] = useState<"Music" | "Chat">("Music");
 
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages])
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
-  if (status === 'loading') {
+  if (status === "loading") {
     return (
       <div className="min-h-screen bg-slate-900 flex items-center justify-center">
         <div className="text-white text-xl">Loading...</div>
       </div>
-    )
+    );
   }
 
   if (!session) {
-    router.push('/login')
-    return null
+    router.push("/login");
+    return null;
   }
 
   const handleSearch = async () => {
-    if (!searchQuery.trim() || isSearching) return
-    
-    setIsSearching(true)
+    if (!searchQuery.trim() || isSearching) return;
+
+    setIsSearching(true);
     try {
-      const response = await fetch(`/api/search?q=${encodeURIComponent(searchQuery)}`)
+      const response = await fetch(
+        `/api/search?q=${encodeURIComponent(searchQuery)}`
+      );
       if (!response.ok) {
-        throw new Error('Search failed')
+        throw new Error("Search failed");
       }
-      const data = await response.json()
-      setSearchResults(data.results || [])
+      const data = await response.json();
+      setSearchResults(data.results || []);
     } catch (error) {
-      console.error('Search failed:', error)
-      setSearchResults([])
+      console.error("Search failed:", error);
+      setSearchResults([]);
     } finally {
-      setIsSearching(false)
+      setIsSearching(false);
     }
-  }
+  };
 
   const handleVideoSelect = (song: Song) => {
-    setCurrentVideo(song)
-  }
+    setCurrentVideo(song);
+  };
 
   const handleSendMessage = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     if (newMessage.trim()) {
       const message: ChatMessage = {
         id: Date.now().toString(),
-        user: session.user?.name || 'You',
+        user: session.user?.name || "You",
         message: newMessage,
-        avatar: session.user?.image || 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=100',
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      }
-      setMessages([...messages, message])
-      setNewMessage('')
+        avatar:
+          session.user?.image ||
+          "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=100",
+        timestamp: new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      };
+      setMessages([...messages, message]);
+      setNewMessage("");
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-transparent text-white">
@@ -123,24 +132,28 @@ export default function RoomPage({ params }: { params: { roomId: string } }) {
       <header className="flex items-center justify-between p-4 bg-transparent ">
         <div className="flex items-center space-x-2">
           <div className="w-8 h-8 bg-[#9b5de5] rounded-lg flex items-center justify-center">
-            <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+            <svg
+              className="w-5 h-5 text-white"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
             </svg>
           </div>
           <span className="text-xl font-bold">PlaySync</span>
         </div>
-        
+
         <div className="text-center">
           <p className="text-sm text-gray-400">Created by</p>
           <p className="text-white font-medium">sweabhishek01</p>
         </div>
-        
+
         <div className="flex items-center space-x-3">
           <button className="px-6 py-2 bg-gray-600/50 hover:bg-gray-600/70 rounded-full transition-colors text-sm">
             Share
           </button>
-          <button 
-            onClick={() => router.push('/')}
+          <button
+            onClick={() => router.push("/")}
             className="px-6 py-2 bg-red-600 hover:bg-red-700 rounded-full transition-colors text-sm"
           >
             Leave
@@ -177,26 +190,26 @@ export default function RoomPage({ params }: { params: { roomId: string } }) {
         </div>
 
         {/* Sidebar */}
-        <div className="w-80 bg-transparent border-l border-gray-700/30 flex flex-col">
+        <div className="w-96 bg-transparent border-l border-gray-700/30 flex flex-col">
           {/* Tab Headers */}
           <div className="flex items-center justify-between p-4 border-b border-gray-700/30">
             <div className="flex space-x-2">
               <button
-                onClick={() => setActiveTab('Music')}
+                onClick={() => setActiveTab("Music")}
                 className={`px-4 py-2 rounded-full text-sm transition-colors ${
-                  activeTab === 'Music'
-                    ? 'bg-[#9b5de5] text-white'
-                    : 'bg-gray-600/50 text-gray-300 hover:bg-gray-600/70'
+                  activeTab === "Music"
+                    ? "bg-[#9b5de5] text-white"
+                    : "bg-gray-600/50 text-gray-300 hover:bg-gray-600/70"
                 }`}
               >
                 Music
               </button>
               <button
-                onClick={() => setActiveTab('Chat')}
+                onClick={() => setActiveTab("Chat")}
                 className={`px-4 py-2 rounded-full text-sm transition-colors ${
-                  activeTab === 'Chat'
-                    ? 'bg-[#9b5de5] text-white'
-                    : 'bg-gray-600/50 text-gray-300 hover:bg-gray-600/70'
+                  activeTab === "Chat"
+                    ? "bg-[#9b5de5] text-white"
+                    : "bg-gray-600/50 text-gray-300 hover:bg-gray-600/70"
                 }`}
               >
                 Chat
@@ -208,7 +221,7 @@ export default function RoomPage({ params }: { params: { roomId: string } }) {
           </div>
 
           {/* Tab Content */}
-          {activeTab === 'Music' ? (
+          {activeTab === "Music" ? (
             <div className="flex-1 flex flex-col">
               {/* Search Section */}
               <div className="p-4 border-b border-gray-700/30">
@@ -217,7 +230,7 @@ export default function RoomPage({ params }: { params: { roomId: string } }) {
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                    onKeyPress={(e) => e.key === "Enter" && handleSearch()}
                     placeholder="Search for songs"
                     className="flex-1 bg-gray-700 text-white placeholder-gray-400 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
                   />
@@ -226,7 +239,7 @@ export default function RoomPage({ params }: { params: { roomId: string } }) {
                     disabled={isSearching || !searchQuery.trim()}
                     className="px-4 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 rounded-lg text-sm transition-colors"
                   >
-                    {isSearching ? '...' : 'search'}
+                    {isSearching ? "..." : "search"}
                   </button>
                 </div>
               </div>
@@ -246,19 +259,19 @@ export default function RoomPage({ params }: { params: { roomId: string } }) {
                       <p>Search for songs to see results</p>
                     </div>
                   )}
-                  
+
                   {isSearching && (
                     <div className="text-center text-gray-400 py-8">
                       <p>Searching...</p>
                     </div>
                   )}
-                  
+
                   {searchResults.map((song) => (
                     <div
                       key={song.id}
                       onClick={() => handleVideoSelect(song)}
                       className={`flex items-center space-x-3 p-3 hover:bg-gray-700/50 cursor-pointer transition-colors border-b border-gray-700/20 ${
-                        currentVideo?.id === song.id ? 'bg-gray-700/50' : ''
+                        currentVideo?.id === song.id ? "bg-gray-700/50" : ""
                       }`}
                     >
                       <Image
@@ -269,8 +282,12 @@ export default function RoomPage({ params }: { params: { roomId: string } }) {
                         className="rounded-lg flex-shrink-0"
                       />
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-medium text-white truncate text-sm">{song.title}</h4>
-                        <p className="text-xs text-gray-400 truncate">{song.artist}</p>
+                        <h4 className="font-medium text-white truncate text-sm">
+                          {song.title}
+                        </h4>
+                        <p className="text-xs text-gray-400 truncate">
+                          {song.artist}
+                        </p>
                       </div>
                       <button className="p-1 hover:bg-gray-600 rounded transition-colors">
                         <MoreHorizontal className="w-4 h-4 text-gray-400" />
@@ -286,18 +303,22 @@ export default function RoomPage({ params }: { params: { roomId: string } }) {
               <div className="flex-1 overflow-y-auto p-4 space-y-4">
                 {messages.map((message) => (
                   <div key={message.id} className="flex items-start space-x-3">
-                    <Image
-                      src={message.avatar}
-                      alt={message.user}
-                      width={32}
-                      height={32}
-                      className="rounded-full flex-shrink-0"
-                    />
+                    <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-[#9b5de5] flex-shrink-0">
+                      <Image
+                        src={message.avatar}
+                        alt={message.user}
+                        width={40}
+                        height={40}
+                        className="object-cover w-full h-full"
+                      />
+                    </div>
                     <div className="flex-1">
                       <div className="bg-purple-600 rounded-2xl rounded-tl-md px-4 py-2 max-w-xs inline-block">
                         <p className="text-sm text-white">{message.message}</p>
                       </div>
-                      <p className="text-xs text-gray-400 mt-1">{message.user} • {message.timestamp}</p>
+                      <p className="text-xs text-gray-400 mt-1">
+                        {message.user} • {message.timestamp}
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -305,7 +326,10 @@ export default function RoomPage({ params }: { params: { roomId: string } }) {
               </div>
 
               {/* Chat Input */}
-              <form onSubmit={handleSendMessage} className="p-4 border-t border-gray-700/30">
+              <form
+                onSubmit={handleSendMessage}
+                className="p-4 border-t border-gray-700/30"
+              >
                 <div className="flex space-x-2">
                   <input
                     type="text"
@@ -328,5 +352,5 @@ export default function RoomPage({ params }: { params: { roomId: string } }) {
         </div>
       </div>
     </div>
-  )
+  );
 }
