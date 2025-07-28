@@ -129,7 +129,7 @@ export default function RoomPage({ params }: { params: { roomId: string } }) {
     <div className="min-h-screen bg-transparent text-white">
       {/* Header */}
       <SplashCursor />
-      <header className="flex items-center justify-between p-4 bg-transparent ">
+      <header className="flex items-center justify-between p-4 bg-transparent">
         <div className="flex items-center space-x-2">
           <div className="w-8 h-8 bg-[#9b5de5] rounded-lg flex items-center justify-center">
             <svg
@@ -143,25 +143,27 @@ export default function RoomPage({ params }: { params: { roomId: string } }) {
           <span className="text-xl font-bold">PlaySync</span>
         </div>
 
-        <div className="text-center">
+        {/* Hide creator info on mobile */}
+        <div className="text-center hidden md:block">
           <p className="text-sm text-gray-400">Created by</p>
           <p className="text-white font-medium">sweabhishek01</p>
         </div>
 
         <div className="flex items-center space-x-3">
-          <button className="px-6 py-2 bg-gray-600/50 hover:bg-gray-600/70 rounded-full transition-colors text-sm">
+          <button className="px-4 md:px-6 py-2 bg-gray-600/50 hover:bg-gray-600/70 rounded-full transition-colors text-sm hidden md:block">
             Share
           </button>
           <button
             onClick={() => router.push("/")}
-            className="px-6 py-2 bg-red-600 hover:bg-red-700 rounded-full transition-colors text-sm"
+            className="px-4 md:px-6 py-2 bg-red-600 hover:bg-red-700 rounded-full transition-colors text-sm"
           >
             Leave
           </button>
         </div>
       </header>
 
-      <div className="flex h-[calc(100vh-80px)]">
+      {/* Desktop Layout */}
+      <div className="hidden md:flex h-[calc(100vh-80px)]">
         {/* Main Content */}
         <div className="flex-1 pt-24">
           {/* YouTube Video Player */}
@@ -189,7 +191,7 @@ export default function RoomPage({ params }: { params: { roomId: string } }) {
           </div>
         </div>
 
-        {/* Sidebar */}
+        {/* Desktop Sidebar */}
         <div className="w-96 bg-transparent border-l border-gray-700/30 flex flex-col">
           {/* Tab Headers */}
           <div className="flex items-center justify-between p-4 border-b border-gray-700/30">
@@ -220,7 +222,7 @@ export default function RoomPage({ params }: { params: { roomId: string } }) {
             </button>
           </div>
 
-          {/* Tab Content */}
+          {/* Desktop Tab Content */}
           {activeTab === "Music" ? (
             <div className="flex-1 flex flex-col">
               {/* Search Section */}
@@ -349,6 +351,213 @@ export default function RoomPage({ params }: { params: { roomId: string } }) {
               </form>
             </div>
           )}
+        </div>
+      </div>
+
+      {/* Mobile Layout */}
+      <div className="md:hidden flex flex-col h-[calc(100vh-80px)]">
+        {/* Mobile Video Section */}
+        <div className="flex-1">
+          {/* Artist Header */}
+          <div className="relative">
+            <button
+              onClick={() => router.back()}
+              className="absolute top-4 left-4 z-10 p-2 bg-black/50 rounded-full"
+            >
+              <svg
+                className="w-6 h-6 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+            </button>
+
+            <div className="relative h-64 bg-gradient-to-b from-gray-800 to-gray-900">
+              {currentVideo?.image && (
+                <Image
+                  src={currentVideo.image}
+                  alt={currentVideo.title || "Artist"}
+                  fill
+                  className="object-cover opacity-70"
+                />
+              )}
+              <div className="absolute bottom-4 left-4">
+                <h1 className="text-2xl font-bold text-white">MAROON 5</h1>
+                <p className="text-gray-300 text-sm">Artist</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Mobile Tab Navigation */}
+          <div className="flex items-center justify-between p-4 bg-gray-900/95 backdrop-blur-sm">
+            <div className="flex space-x-2">
+              <button
+                onClick={() => setActiveTab("Music")}
+                className={`px-4 py-2 rounded-full text-sm transition-colors ${
+                  activeTab === "Music"
+                    ? "bg-[#9b5de5] text-white"
+                    : "bg-gray-600/50 text-gray-300"
+                }`}
+              >
+                Music
+              </button>
+              <button
+                onClick={() => setActiveTab("Chat")}
+                className={`px-4 py-2 rounded-full text-sm transition-colors ${
+                  activeTab === "Chat"
+                    ? "bg-[#9b5de5] text-white"
+                    : "bg-gray-600/50 text-gray-300"
+                }`}
+              >
+                Chat
+              </button>
+            </div>
+            <button className="p-2 bg-gray-600/50 rounded-lg">
+              <Share className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* Mobile Content */}
+          <div className="flex-1 overflow-hidden">
+            {activeTab === "Music" ? (
+              <div className="h-full flex flex-col">
+                {/* Mobile Search */}
+                <div className="p-4 border-b border-gray-700/30">
+                  <div className="flex space-x-2">
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      onKeyPress={(e) => e.key === "Enter" && handleSearch()}
+                      placeholder="Search for songs"
+                      className="flex-1 bg-gray-700 text-white placeholder-gray-400 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    />
+                    <button
+                      onClick={handleSearch}
+                      disabled={isSearching || !searchQuery.trim()}
+                      className="px-4 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 rounded-lg text-sm transition-colors"
+                    >
+                      {isSearching ? "..." : "search"}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Mobile Playlist */}
+                <div className="flex-1 flex flex-col">
+                  <div className="flex items-center justify-between p-4 border-b border-gray-700/30">
+                    <h3 className="text-lg font-semibold">Playlist</h3>
+                    <button className="text-sm text-gray-400">See more</button>
+                  </div>
+
+                  <div className="flex-1 overflow-y-auto">
+                    {searchResults.length === 0 && !isSearching && (
+                      <div className="text-center text-gray-400 py-8">
+                        <p>Search for songs to see results</p>
+                      </div>
+                    )}
+
+                    {isSearching && (
+                      <div className="text-center text-gray-400 py-8">
+                        <p>Searching...</p>
+                      </div>
+                    )}
+
+                    {searchResults.map((song) => (
+                      <div
+                        key={song.id}
+                        onClick={() => handleVideoSelect(song)}
+                        className={`flex items-center space-x-3 p-4 hover:bg-gray-700/50 cursor-pointer transition-colors border-b border-gray-700/20 ${
+                          currentVideo?.id === song.id ? "bg-gray-700/50" : ""
+                        }`}
+                      >
+                        <Image
+                          src={song.image}
+                          alt={song.title}
+                          width={56}
+                          height={56}
+                          className="rounded-lg flex-shrink-0"
+                        />
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-medium text-white truncate">
+                            {song.title}
+                          </h4>
+                          <p className="text-sm text-gray-400 truncate">
+                            {song.artist}
+                          </p>
+                        </div>
+                        <button className="p-2 hover:bg-gray-600 rounded transition-colors">
+                          <MoreHorizontal className="w-5 h-5 text-gray-400" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="h-full flex flex-col">
+                {/* Mobile Chat Messages */}
+                <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                  {messages.map((message) => (
+                    <div
+                      key={message.id}
+                      className="flex items-start space-x-3"
+                    >
+                      <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-[#9b5de5] flex-shrink-0">
+                        <Image
+                          src={message.avatar}
+                          alt={message.user}
+                          width={40}
+                          height={40}
+                          className="object-cover w-full h-full"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <div className="bg-purple-600 rounded-2xl rounded-tl-md px-4 py-2 max-w-xs inline-block">
+                          <p className="text-sm text-white">
+                            {message.message}
+                          </p>
+                        </div>
+                        <p className="text-xs text-gray-400 mt-1">
+                          {message.user} • {message.timestamp}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                  <div ref={chatEndRef} />
+                </div>
+
+                {/* Mobile Chat Input */}
+                <form
+                  onSubmit={handleSendMessage}
+                  className="p-4 border-t border-gray-700/30 bg-gray-900/95 backdrop-blur-sm"
+                >
+                  <div className="flex space-x-2">
+                    <input
+                      type="text"
+                      value={newMessage}
+                      onChange={(e) => setNewMessage(e.target.value)}
+                      placeholder="Type Something"
+                      className="flex-1 bg-gray-700 text-white placeholder-gray-400 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    />
+                    <button
+                      type="submit"
+                      disabled={!newMessage.trim()}
+                      className="bg-purple-600 hover:bg-purple-700 disabled:bg-gray-600 rounded-xl p-3 transition-colors"
+                    >
+                      <Send size={20} />
+                    </button>
+                  </div>
+                </form>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
