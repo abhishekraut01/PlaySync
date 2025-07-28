@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { SplashCursor } from "@/components/ui/splash-cursor";
 
 export default function HomePage() {
   const { data: session, status } = useSession();
@@ -36,7 +37,8 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+    <div className="min-h-screen bg-black">
+      <SplashCursor />
       {/* Header */}
       <header className="p-6 flex justify-between items-center">
         <div className="flex items-center space-x-2">
