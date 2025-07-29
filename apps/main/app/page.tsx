@@ -54,16 +54,18 @@ export default function HomePage() {
           <span className="text-white text-xl font-bold">PlaySync</span>
         </div>
         <div className="flex items-center space-x-4">
-          {session.user?.image && (
-            <Image
-              src={session.user.image}
-              alt="Profile"
-              width={40}
-              height={40}
-              className="rounded-full"
-              draggable={false}
-            />
-          )}
+          <Image
+            src={
+              session?.user?.image
+                ? session.user.image
+                : "/NicePng_kakashi-png_2099655.png"
+            }
+            alt="Profile"
+            width={40}
+            height={40}
+            className="rounded-full"
+            draggable={false}
+          />
         </div>
       </header>
 
